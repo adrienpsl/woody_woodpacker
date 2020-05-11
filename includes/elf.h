@@ -2,7 +2,7 @@
 #ifndef _UAPI_LINUX_ELF_H
 #define _UAPI_LINUX_ELF_H
 
-#include <linux/types.h>
+#include <linux_types.h>
 #include <linux/elf-em.h>
 
 /* 32-bit ELF base types. */
