@@ -1,6 +1,5 @@
 
 #include <stdio.h>
-# include <elf.h>
 
 // test if good magic
 // look if text section
