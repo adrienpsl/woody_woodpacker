@@ -21,5 +21,48 @@ pour que ca marche, il me faut plus de connaissance sur comment c'est linux.
 A mon avis, le plus simple, c'est de mettre mon element a la fin de la section
 text
 
-CA ME SOUL, JE VOIS LIRE UN LIVRE LA DESSUS, C'EST UN ENFER DE RIEN
-COMPRENDRE COMME CA. J'AI PAS LES PUTAINS DE BASE...
+-> je veux ecrire a la fin de mon binaire et regarder ce que ca fait
+  yeah !
+
+
+Je dois savoir quelle section parle a quelle section,
+pour pouvoir en ajouter une a la fin.
+
+Ensuite je vais strip mon binaire
+
+comment est load en memoire, mon binaire ?
+
+
+
+
+
+-> find the last section
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

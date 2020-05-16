@@ -11,110 +11,56 @@
 # include "packer.h"
 
 t_packer packer = {};
+bool g_debug = false;
 
-void *map_file()
+void print_section_name(Elf64_Shdr sections_tab[], char *strtab)
 {
-	int fd;
-	int size;
-	void *file;
 
-	fd = \
-        open(
-		"/home/adpusel/Desktop/osxShare/woody_woodpacker/youtube_tuto/hello",
-		O_RDWR);
-	if (fd < 0)
-		return (NULL);
+	Elf64_Shdr *current;
+	char *section_name;
+	(void)strtab;
 
-	if (-1 == (size = lseek(fd, 0, SEEK_END)))
-		return (NULL);
-
-	packer.size = size;
-
-	if (MAP_FAILED == (file = mmap(0, size, PROT_READ, MAP_PRIVATE, fd, 0)))
-		return (NULL);
-
-	return file;
+	for (uint64_t i = 0; i < packer.header->e_shnum; ++i)
+	{
+		current = sections_tab + i;
+		section_name = packer.strtab + current->sh_name;
+		printf("%s %d %p\n", section_name,
+			packer.header->e_shstrndx + current->sh_name, packer.strtab);
+	}
 }
 
-int parse_header(void)
+int main(void)
 {
-	Elf64_Ehdr *header_64;
+	packer.start = map_file(
+		"/home/adpusel/Desktop/osxShare/woody_woodpacker/resouce_2/sample",
+		&packer.size, &packer.fd);
 
-	header_64 = packer.file;
+	if (NULL == packer.start)
+		perror("packer");
 
-	// bad magic
-	if (ELF_START != *(int *)header_64)
-	{
-		ft_dprintf(STDERR_FILENO, "Magic is not ELF\n");
-		return (-1);
-	}
+	if (OK != check_header())
+		return -1;
 
-	if (header_64->e_ident[EI_CLASS] != ELFCLASS64)
-	{
-		dprintf(STDERR_FILENO, "ELF is not 64bits\n");
-		return (-1);
-	}
+	printf("%d \n", packer.header->e_shstrndx);
+	print_section_name(packer.section_tab, packer.strtab);
 
-	if (header_64->e_ident[EI_DATA] == 0)
-	{
-		dprintf(STDERR_FILENO, "Invalid data encoding\n");
-		return (-1);
-	}
 
-	else if (header_64->e_ident[EI_DATA] == ELFDATA2MSB)
-		packer.big_endian = 1;
+	// I can add whatever I want, and just regoing at the new entry point.
+	// I didn't even need to see what's do the section.
+	// yeah
+	// add some stuff at the end,
 
-	packer.sh_off = packer.start + header_64->e_shoff;
-	packer.header = packer.file;
+	// how add my code at the end of the start?
 
-	packer.origin_entry_point = packer.start + header_64->e_entry;
-	packer.sh_num = header_64->e_shnum;
-	return (0);
-}
 
-int main()
-{
-	t_packer *p = &packer;
-	(void)p;
-	packer.file = map_file();
-	packer.current = packer.file;
-	packer.start = packer.file;
+	// after my reading, It seem obvious that a bad binary can have
+	// these bad stuff, and break all!
+	// I don't want touch the binary a lot
+	// if a section is at the end of my binary all will be broken
+	// if that happen, all my data can be kein!
+	// so, the best is to write at the end of the binary to be sure
+	// that nothing will be broken! yeah! wonderful, amazing!
 
-	if (OK != parse_header())
-		return (-1);
-
-	uint64_t i = 0;
-	Elf64_Shdr *shdr = packer.sh_off;
-	Elf64_Shdr *current_shdr;
-
-	uint64_t strtable_offset;
-
-	while (i < packer.sh_num)
-	{
-		if (shdr[i].sh_type == SHT_STRTAB)
-			strtable_offset = shdr[i].sh_offset;
-		i++;
-	}
-
-	i = 0;
-	int position;
-	while (i < packer.sh_num)
-	{
-		current_shdr = shdr + i;
-		position = strtable_offset + current_shdr->sh_name;
-		printf("%8.lx + %8.lx => (%5.lx) ",
-			current_shdr->sh_offset, current_shdr->sh_size,
-			current_shdr->sh_offset + current_shdr->sh_size);
-		printf("%2lu, %s \n", i, (char *)(packer.start + position));
-		printf("%ld \n", (void *)current_shdr - (void *)packer.file);
-		i++;
-	}
-
-	uint64_t all_section_size = i * sizeof(Elf64_Shdr);
-	printf("%ld\n", packer.size);
-	printf("section header ---- \nstart off %lx ", packer.header->e_shoff);
-	printf("size %lx end %lx\n", all_section_size,
-		packer.header->e_shoff + all_section_size);
 
 	return (0);
 }

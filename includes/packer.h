@@ -18,19 +18,46 @@
 typedef struct s_packer
 {
 	Elf64_Ehdr *header;
+
 	uint64_t size;
-	void *current;
-	void *file;
+	int fd;
+
+
+	// intern
+	void *strtab;
+
+	Elf64_Shdr *section_tab;
+
+
 	void *start;
 	void *end;
 	void *origin_entry_point;
-	void *sh_off;
-	uint64_t sh_num;
 	int big_endian;
 } t_packer;
 
 # define OK 0
 
 # define ELF_START 1179403647
+
+extern bool g_debug;
+extern t_packer packer;
+
+
+
+
+
+
+int check_header(void);
+void *map_file(char *pathFile, uint64_t *p_size, int *p_fd);
+
+
+
+
+
+
+
+
+
+
 
 #endif //WOODY_WOODPACKER_PACKER_H

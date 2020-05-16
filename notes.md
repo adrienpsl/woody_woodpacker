@@ -56,7 +56,7 @@ bon enfaite ca va, je dois 'juste changer la partie data'
    comprendre comment marche un elf header.
 
 
--> taille de la partie data  
+-> taille de la partie data
 -> modification des address de la parti data pour fit avec le new program  
 -> comment je decompile en memoire ce que je fais?
 -> modifier les address pour avoir les bonne nouvelles
@@ -73,13 +73,32 @@ bon enfaite ca va, je dois 'juste changer la partie data'
    value ?
 
 
+parse tout -> les table, et toute les sections,
+           -> Je me met apres bss et data.
+           -> et je fais ma section dedans,
+           -> mais c'est plus malin, de check
+              que c'est bien la deniere section,
+              car pas besoin de faire plus de verification.
+
+           -> Je trouve la section la plus en bas dans le code
+           -> Je met mon code dedans
+           -> je l'agrandi + je le fait avant pour la section text
+           -> je chercher la derniere section,
+           -> je cherche  le header qui pointe a la derniere
+              section et je mets des truc apres
+           -> trouver la dernier section.
+
+-> find the segment with the biggest offset.
 
 
+-> cherche le dernier header, avec l'offset le plus grand.
+    -> quand je vais a cette offset, qu'est ce qui ya?
+->
 
 
-
-
-
+je veux ajouter dans la dernier section mon super code,
+because it's the way they doing that.
+how I will get the address? I do not no for the moment.
 
 
 
