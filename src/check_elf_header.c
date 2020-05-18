@@ -21,7 +21,7 @@ void *find_strtab(void *start, Elf64_Ehdr *header, Elf64_Shdr *section_tab)
 int check_header(void)
 {
 
-	packer.header = packer.start;
+	packer.header = packer.file;
 
 	// bad magic
 	if (ELF_START != *(int *)packer.header)
@@ -46,11 +46,12 @@ int check_header(void)
 		packer.big_endian = 1;
 
 	// todo check if in the file
-	packer.origin_entry_point = packer.start + packer.header->e_entry;
-	packer.section_tab = packer.start + packer.header->e_shoff;
+	packer.origin_entry_point = packer.file + packer.header->e_entry;
+	packer.section_tab = packer.file + packer.header->e_shoff;
+	packer.program_header = packer.file + packer.header->e_phoff;
 
 	packer.strtab = find_strtab(
-		packer.start,
+		packer.file,
 		packer.header,
 		packer.section_tab
 	);

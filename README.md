@@ -36,7 +36,7 @@ comment est load en memoire, mon binaire ?
 
 
 
--> find the last section
+-> find the last segment
 
 
 

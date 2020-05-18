@@ -25,11 +25,12 @@ typedef struct s_packer
 
 	// intern
 	void *strtab;
+	void *end_last_segment;
 
 	Elf64_Shdr *section_tab;
+	Elf64_Phdr *program_header;
 
-
-	void *start;
+	void *file;
 	void *end;
 	void *origin_entry_point;
 	int big_endian;
@@ -47,6 +48,7 @@ extern t_packer packer;
 
 
 
+void print_section_name(Elf64_Shdr sections_tab[], char *strtab);
 int check_header(void);
 void *map_file(char *pathFile, uint64_t *p_size, int *p_fd);
 

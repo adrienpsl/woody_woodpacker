@@ -12,30 +12,18 @@
 
 #include "packer.h"
 
-// map the file in memory, and check all error.
-void *map_file(char *pathFile, uint64_t *p_size, int *p_fd)
+void print_section_name(Elf64_Shdr sections_tab[], char *strtab)
 {
-	int fd;
-	int size;
-	void *file;
 
-	if (g_debug)
-		printf("Try open %s", pathFile);
+	Elf64_Shdr *current;
+	char *section_name;
+	(void)strtab;
 
-	fd = open(pathFile, O_RDWR);
-	if (fd < 0)
-		return (NULL);
-
-	size = lseek(fd, 0, SEEK_END);
-	if (-1 == size)
-		return (NULL);
-
-	file = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-	if (MAP_FAILED == file)
-		return (NULL);
-
-	*p_size = size;
-	*p_fd = fd;
-
-	return file;
+	for (uint64_t i = 0; i < packer.header->e_shnum; ++i)
+	{
+		current = sections_tab + i;
+		section_name = packer.strtab + current->sh_name;
+		printf("%s %d %p\n", section_name,
+			packer.header->e_shstrndx + current->sh_name, packer.strtab);
+	}
 }
